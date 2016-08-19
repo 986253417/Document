@@ -1,0 +1,6 @@
+How to deloy a .Net Sample application to AWS 
+Elastic beanstalk using the AWS ToolKit for visual studio
+http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_NET.quickstart.html
+
+
+step1： create the Environment

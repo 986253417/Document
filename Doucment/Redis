@@ -1,0 +1,53 @@
+ 
+redis环境搭建： 
+1:在windows上的安装server与配置 
+1：进入github的redis相关下载页面： 
+（1）进入GitHub的Redis相关包下载页面：https://github.com/MSOpenTech/redis 
+　　　　Of course，这个地址也是可以的：https://github.com/dmajkic/redis/downloads 
+第（1）步选择2.6的brunch，里面有已经编好的可执行文件。如果想使用最新的版本可以自行选择。（2016年6月16日下载到的是3.0版本。但是里面没有提供bin文件需要自己编译生成，）
+2：打开压缩包，可以看到我们下载的其实是一个完整的redis2.6的包。包含了bin、src等文件。src是源码 
+而bin则是编译好的执行文件。进入bin目录，又可以看到2个目录，一个是32位操作系统的一个是64位操作系统的。 
+其中可执行文件： 
+redis-server.exe：服务程序，也是最核心的一个程序。 
+redis-check-dump.exe：本地数据库检查 
+redis-benchmark.exe：性能测试，用以模拟同时N个客户端发送M个SET/GET查询。 
+redis-check-aof.exe :更新日志检查 
+redis-cli.exe 客户端commandline 
+另外。服务器启动需要一个配置文件。在下载包里根目录下的redis.conf 文件。把它复制到可执行文件的同一目录可以方便配置。
+3：配置服务器：打开redis.conf 。根据实际情况进行配置,所有配置都带有比较完整的配置注释，通常其实以默认配置即可（注意搜索port查询服务的端口号，默认时6379）
+
+4： 启动server：这个需要在windows的命令行中开启。在命令行中，进入到可执行文件的当前目录输入redis-server.exe redis.conf即可。
+3：配置服务器：打开redis.conf 。根据实际情况进行配置,所有配置都带有比较完整的配置注释，通常其实以默认配置即可（注意搜索port查询服务的端口号，默认时6379）
+
+4： 启动server：这个需要在windows的命令行中开启。在命令行中，进入到可执行文件的当前目录输入redis-server.exe redis.conf即可。
+5 启动测试是否服务器启动成功：在命令行中，启动客户端，进行测试即可：redis-cli.exe -h <ip地址。本地是127.0.0.1> -p <端口。默认配置是6379>
+例如：redis-cli.exe -h 127.0.0.1 -p 6379
+启动后可以尝试输入一些命令测试。例如set <key> <value> 或者 get <key>
+如果没有看过命令文档，可以输入以下命令：
+set name nihao
+
+get name
+
+
+程序中使用
+VS开发环境搭建：
+官网推荐使用的是： servicestack.Redis
+地址是：https://github.com/ServiceStack/ServiceStack.Redis
+下载后在bin文件夹中有需要使用的dll
+servicestack.common.dll
+servicestack.interfaces.dll
+servicestack.redis.dll
+servicestack.text.dll
+新建一个.net项目，引用这些dll。
+
+然后就可以在程序中使用了。
+例如
+static RedisClient redisClient = new RedisClient("127.0.0.1",6379);
+
+redisClient.Get<string>("city");
+
+redisClient.Store<pkg>(pkg) 可以存贮一个类。
+
+
+或者直接建立一个servciestack的项目。
+
