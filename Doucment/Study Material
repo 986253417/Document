@@ -22,3 +22,6 @@ http://dev.mysql.com/doc/refman/5.7/en/integer-types.html
 
 mysql create procedure tutorial
 https://code.tutsplus.com/articles/an-introduction-to-stored-procedures-in-mysql-5--net-17843
+mysql 
+RENAME TABLE Syntax
+alter table old_tableName RENAME new_tableName;
