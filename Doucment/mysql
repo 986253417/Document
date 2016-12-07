@@ -1,0 +1,2 @@
+check mysql version command:
+SELECT VERSION();
