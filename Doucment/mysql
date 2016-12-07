@@ -1,2 +1,9 @@
 check mysql version command:
 SELECT VERSION();
+linux 下启动 mysql 服务
+1，查看mysql 的状态
+/etc/init.d/mysql status
+2，to start my sql server use the below command
+/etc/init.d/mysql start
+3，to stop the server use the below command
+/etc/init.d/mysql stop
