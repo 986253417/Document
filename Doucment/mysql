@@ -1,5 +1,4 @@
-check mysql version command:
-SELECT VERSION();
+## check mysql version command:SELECT VERSION();
 linux 下启动 mysql 服务
 1，查看mysql 的状态
 /etc/init.d/mysql status
@@ -20,3 +19,17 @@ FLUSH PRIVILEGES;
 use mysql workbench：
 MySQL Workbench provides a graphical 
 tool for working with MySQL servers and databases. MySQL Workbench fully supports MySQL versions 5.1 and above.
+1，linux 查看mysql的端口以及修改端口
+    Linux下查看进程占用端口：查看程序对应进程号：ps –ef|grep 进程名
+    Linux下查看端口号所使用的进程号:使用lsof命令： lsof –i:端口号
+2, allow a specific client ip-address (for example: 10.0.63.42) to
+    access the mysql database running on a server(10.0.63.52)
+    $ mysql -u root -p
+    Enter password:
+
+    mysql> use mysql
+
+    mysql> GRANT ALL ON *.* to root@'192.168.1.4' IDENTIFIED BY 'your-root-password'; 
+
+    mysql> FLUSH PRIVILEGES;
+    $ /etc/init.d/mysql restart
