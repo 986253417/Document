@@ -29,7 +29,7 @@ tool for working with MySQL servers and databases. MySQL Workbench fully support
 
     mysql> use mysql
 
-    mysql> GRANT ALL ON *.* to root@'192.168.1.4' IDENTIFIED BY 'your-root-password'; 
+    mysql> GRANT ALL ON *.* to root@'10.0.63.42' IDENTIFIED BY 'your-root-password'; 
 
     mysql> FLUSH PRIVILEGES;
     $ /etc/init.d/mysql restart
