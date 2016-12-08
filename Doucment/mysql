@@ -30,6 +30,9 @@ tool for working with MySQL servers and databases. MySQL Workbench fully support
     mysql> use mysql
 
     mysql> GRANT ALL ON *.* to root@'10.0.63.42' IDENTIFIED BY 'your-root-password'; 
-
+    
     mysql> FLUSH PRIVILEGES;
     $ /etc/init.d/mysql restart
+    
+     mysql> GRANT ALL ON menagerie.* TO 'your_mysql_name'@'your_client_host';
+     where your_mysql_name is the MySQL user name assigned to you and your_client_host is the host from which you connect to the server.
