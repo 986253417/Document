@@ -16,3 +16,7 @@ linux 下授权某个账号可以对数据库test 的读写权限
 3,修改之后需要flush 一下，更新数据，然后重启mysql的服务
 FLUSH PRIVILEGES;
 /etc/init.d/mysql start
+
+use mysql workbench：
+MySQL Workbench provides a graphical 
+tool for working with MySQL servers and databases. MySQL Workbench fully supports MySQL versions 5.1 and above.
