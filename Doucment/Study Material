@@ -59,6 +59,6 @@ summary
 8. Jenkins (CI --continous integration) 的搭建与流程
 9. C++ 11 (线程thread， 语法堂，lamda, 左值右值)
 10. 全栈开发（有哪些全栈开发， LAMP ， MEAN, ROR, .Net 等） 掌握一套全栈开发技能， 能够快速开发工具
-11. git pro （git 简明教程）
+11. git pro （git 简明教程）http://iissnan.com/progit/html/zh/ch1_2.html
     学习git的基本原理，框架，能够对分支进行合并和管理。
 12. NoSQL 的种类
