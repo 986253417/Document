@@ -46,3 +46,18 @@ Be my guest.
 
 
 https://git.oschina.net/swolice/epoll.git
+
+2016-12-15
+summary
+1. mysql doc (function, procedure)
+2. mysql 优化 
+3. 行为模式（策略模式，模板模式，状态模式）
+4. robot.framework
+5. java 中继承叫extend， 接口叫implement
+6. 面向接口的编程 
+7. DI (Funq)
+8. Jenkins (CI --continous integration) 的搭建与流程
+9. C++ 11 (线程thread， 语法堂，lamda, 左值右值)
+10. 全栈开发（有哪些全栈开发， LAMP ， MEAN, ROR, .Net 等） 掌握一套全栈开发技能， 能够快速开发工具
+11. git pro
+    学习git的基本原理，能够对分支进行合并和管理
