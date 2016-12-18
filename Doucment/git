@@ -8,3 +8,45 @@ git 基于一个分支的常用命令介绍
 
 
 https://github.com/geeeeeeeeek/git-recipes/wiki
+
+2016-12-18 15:00
+git add
+1.用来开始跟踪新文件
+2.把已跟踪的文件放在暂存区
+3.用于合并分支时把有冲突的文件标记为已解决状态
+git checkout
+1.切换分支 git checkout <branchName>
+2.放弃对某个文件的修改 git checkout --<fileName>  撤销对工作区修改
+3.新建分支 git checkout <-b> <branchName> ,不加-b的话只新建不切换到新的分支上，加-b新建并切换到该新分支上。 git branch <branchName>
+
+git stash
+1.git stash [save "instruction"] 用于保存当前的工作进度包括暂存区和工作区的状态
+2.git stash list 显示git stack中的进度列表
+3.恢复改动 git stash pop 弹出最新的一次改动 ，最顶端的即stash<0> 的内容； git stash pop <stash@{id}> 恢复哪一次的改动，该命令执行后将对应的stash id 从stash list里删除；
+   git stash apply <stash@{id}> 功能同git stash pop， 但是执行该命令后会继续保存stash id
+4. 删除stash。 git stash drop <stash@{id}>不指定id时默认是删除最新的，也就是编号是0 的那个，加编号就是删除指定编号的stash
+5. git stash clear 就是清除所有stash 
+6.基于某个stash id建立branch . git stash branch <branchName> [<stash>]
+7. git show <stash> show the changes recorded in the stash as a diff between the stashed state and its original parent. when no <stash> is 
+    given , show the latest one.
+    
+git rebase and git merge
+两者都是用来将一个分支合并到应用分支
+1.git rebase
+$ git checkout mywork
+$ git rebase master 这两个命令会把你的“mywork” 分支里的每个提交（commit）取消掉，并把他们临时保存为补丁（patch）(这些补丁放在“./git/rebase”目录中)，
+  然后把"mywork" 分支更新为最新的“master”,最后把保存的这些补丁应用到"mywork"分支上。 当“mywork” 分支更新之后，它会指向这些新创建的提交（commit）,而那些老的提交会被丢弃。
+  如果在rebase的过程中出现冲突，git会停止rebase并会让你去解决冲突， 解决完后用git add 命令去更新这些内容的索引index,然后无需执行git commit 只要执行：
+  git rebase --contiune
+2. git rebase --abort 
+  终止rebase的行动，并且"mywork" 分支会回到rebase开始前的状态
+3.git pull --rebase ，表示把你本地当前分支里的每个提交commit取消掉，并且把它们临时保存为补丁patch(这些补丁放在./git/rebase目录中）， 然后把本地当前分支更新为最新的origin
+ 分支，最后把保存的这些补丁应用到本地当前的分支上去。
+ 
+ 
+  
+git reset 
+git reset HEAD --file 清空add命令向暂存区提交的关于file的修改（Ustage）,这个命令仅改变暂存区，并不改变工作区。
+1. 取消merge, git reset --hard ORIG_HEAD , 这样会退回到merge前的代码
+2. 取消commit, git reset HEAD-<num> <-soft/--hard> , 取消上num次的commit
+3. 将文件从stage中移除成unstage ， git reset HEAD　<fileName>
