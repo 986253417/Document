@@ -75,6 +75,7 @@ Index is a view of your working directory that is ready for commit. It can be se
   git commit 提交内容到.git repository 而不是本地的/remote/origin/分支名字
   git clone其实clone的是.git 
   
+  http://iissnam.com/progit/html/zh
   
  
  
