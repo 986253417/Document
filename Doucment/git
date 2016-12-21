@@ -50,3 +50,6 @@ git reset HEAD --file 清空add命令向暂存区提交的关于file的修改（
 1. 取消merge, git reset --hard ORIG_HEAD , 这样会退回到merge前的代码
 2. 取消commit, git reset HEAD-<num> <-soft/--hard> , 取消上num次的commit
 3. 将文件从stage中移除成unstage ， git reset HEAD　<fileName>
+2016-12-21
+git staged index
+Index is a view of your working directory that is ready for commit. It can be seen as a pre-commit state and is not as simple as a "list of files". When you do git add, the file ( with the change) is added to the index and the newer changes will not be see until you add them too.
