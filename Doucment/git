@@ -9,6 +9,13 @@ git 基于一个分支的常用命令介绍
 
 https://github.com/geeeeeeeeek/git-recipes/wiki
 
+https://git-scm.com/book/en/v2/Git-Internals-Git-Objects
+
+https://git-scm.com/book/zh/v2/Git-%E5%86%85%E9%83%A8%E5%8E%9F%E7%90%86-%E5%BA%95%E5%B1%82%E5%91%BD%E4%BB%A4%E5%92%8C%E9%AB%98%E5%B1%82%E5%91%BD%E4%BB%A4
+
+
+https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain
+
 2016-12-18 15:00
 git add
 1.用来开始跟踪新文件
@@ -53,3 +60,22 @@ git reset HEAD --file 清空add命令向暂存区提交的关于file的修改（
 2016-12-21
 git staged index
 Index is a view of your working directory that is ready for commit. It can be seen as a pre-commit state and is not as simple as a "list of files". When you do git add, the file ( with the change) is added to the index and the newer changes will not be see until you add them too.
+
+.git repository have main four dir 
+ 1. the HEAD file points to the branch you currently have checked out 
+ 2. the objects directory stores all the content for your database
+ 3. the index file where git store your staging area information
+ 4. the refs directory stores pointes into commit obejcts in that data(branch)
+ 
+ git push -u origin newCreatedBranchName
+  -u option is just short for -set-upstream, this will add an upstream tracking reference for the current branch. you can verify this by looking .git/config file.
+  
+  这个命令是将你的本地工作目录里新建的分支添加引用到你本地git 仓库的/remote/origin/newcreatedBranchName
+  
+  git commit 提交内容到.git repository 而不是本地的/remote/origin/分支名字
+  git clone其实clone的是.git 
+  
+  
+ 
+ 
+ 
