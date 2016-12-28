@@ -9,6 +9,7 @@ protobuf--binary 传输
 http://flask.pocoo.org/docs/0.12/installation/
 http://flask-admin.readthedocs.io/en/latest/introduction/
 http://flask-sqlalchemy.pocoo.org/2.1/models/
+https://github.com/mrjoes/flask-admin/tree/master/examples/quickstart
 
 1, 如何在window 下配置flask python的环境
 1）.安装python
