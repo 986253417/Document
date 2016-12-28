@@ -5,7 +5,7 @@ netstats -a | findstr ""
 控制台应用程序的main中需要记住 Console.ReadLine()
 protobuf--binary 传输
 
-
+2016-12-28
 http://flask.pocoo.org/docs/0.12/installation/
 
 1, 如何在window 下配置flask python的环境
@@ -32,3 +32,6 @@ WTForms==2.1
 
 7） 安装mysql-python 
  <FlaskEnv> D:\Projects\Team\PyEnv> pip install E:\Soft\py_mysql\MySQL_python-1.2.5-cp27-none-win32.whl
+
+2. 为已有的代码建立vs工程
+File -> new -> project -> From existing python code
