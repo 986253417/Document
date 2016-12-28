@@ -36,3 +36,6 @@ tool for working with MySQL servers and databases. MySQL Workbench fully support
     
      mysql> GRANT ALL ON menagerie.* TO 'your_mysql_name'@'your_client_host';
      where your_mysql_name is the MySQL user name assigned to you and your_client_host is the host from which you connect to the server.
+
+
+mysql -h 10.0.63.52(远程mysql的数据库ip) -u zl -pomf1233343
