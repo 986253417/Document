@@ -36,6 +36,11 @@ tool for working with MySQL servers and databases. MySQL Workbench fully support
     
      mysql> GRANT ALL ON menagerie.* TO 'your_mysql_name'@'your_client_host';
      where your_mysql_name is the MySQL user name assigned to you and your_client_host is the host from which you connect to the server.
-
-
+     
+     
+     新建数据库的database 后查看访问这个数据库的用户
+     
+     select user, host from mysql.db where db='new_database';
+     grant all on [database name].[table name] to [user name]@[host name];
+window 登陆linux的mysql
 mysql -h 10.0.63.52(远程mysql的数据库ip) -u zl -pomf1233343
