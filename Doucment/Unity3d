@@ -25,3 +25,7 @@ var json =JsonSerializer.SerializeObject(obj);
 https://docs.unity3d.com/Manual/JSONSerialization.html
 
 unity 3d 工程中引用外部的dll文件，需要将dll文件放在Assets/Plugins/下面，若果还是识别不到需要添加到reference
+
+unity 3d custom editor
+https://docs.unity3d.com/ScriptReference/EditorWindow.html
+
