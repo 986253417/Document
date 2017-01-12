@@ -77,3 +77,5 @@ gof.quanke.name
 装饰模式
 观察者模式
 抽象工厂-产品族和等级产品结构
+
+git checkout -f branchName  强制不保存现分支的修改
