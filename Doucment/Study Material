@@ -82,3 +82,6 @@ git checkout -f branchName  强制不保存现分支的修改
 查看网络速度windows  start task manager->networking  gbps=giga(千兆) bit per second 
 2017-1-13
 servicestack.redis store object （store（T））
+
+common game concepts
+http://ssdoc.asmodee.net/concepts.html
