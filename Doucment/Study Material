@@ -85,3 +85,20 @@ servicestack.redis store object （store（T））
 
 common game concepts
 http://ssdoc.asmodee.net/concepts.html
+
+postman 
+robotframework
+protobuf
+
+postman 
+public static TResponse Send<TRequest,TResponse>(Uri url,TRequest request)
+where TResponse : BaseResponse
+where TRequest:BaseRequest
+{string finalUrl = url+"?format=json";
+string jsonData = JsonSerializer.SerializeObject(request);
+string jsonResp = string.Empty;
+using(WebClient client = new WebClient())
+{
+client.Headers[HttpRequestHeader.ContentType]="application/json;charset=utf-8";
+jsonResp = client.UploadString(finnalUrl,jsonData);
+}return JsonSerializer.DeserializeObject<TResponse>(jsonResp);
