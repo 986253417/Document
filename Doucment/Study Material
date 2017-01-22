@@ -105,3 +105,6 @@ jsonResp = client.UploadString(finnalUrl,jsonData);
 
 
 http://docs.servicestack.net/messaging
+
+
+https://support.microsoft.com/nl-nl/help/815813/how-to-serialize-an-object-to-xml-by-using-visual-c
