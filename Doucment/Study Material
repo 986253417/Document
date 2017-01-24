@@ -110,3 +110,19 @@ hearBeat
 
 
 https://support.microsoft.com/nl-nl/help/815813/how-to-serialize-an-object-to-xml-by-using-visual-c
+
+https://www.codeproject.com/Articles/483055/XML-Serialization-and-Deserialization-Part
+
+Class GameStateMachine
+{
+/*
+Called when the state machine is Launched
+
+*/
+virtual void OnEnter();
+virtual void OnExit();
+virtual void OnUpdate();
+virtaul void Draw();
+virtual void SetOwnerState();
+
+}
