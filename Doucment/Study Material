@@ -126,3 +126,10 @@ virtaul void Draw();
 virtual void SetOwnerState();
 
 }
+2017-1-24
+
+dynamic_cast < new_type > ( expression )		
+ Safely converts pointers and references to classes up, down, and sideways along the inheritance hierarchy.
+
+
+static_cast< Type* >(ptr)
