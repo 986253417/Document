@@ -133,3 +133,6 @@ dynamic_cast < new_type > ( expression )
 
 
 static_cast< Type* >(ptr)
+https://www.pubnub.com/blog/2014-12-01-http-long-polling/
+
+http long polling 
