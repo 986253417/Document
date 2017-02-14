@@ -142,4 +142,10 @@ https://msdn.microsoft.com/en-us/library/gg509017.aspx
 
 c# shuffle a list 
 List<int> list = new List<int>{1,2,3,4,5};
-list = list.OrderBy(x=>Random.Next(0,list.Count)).ToList();//need assgin return
+list = list.OrderBy(x=>Random.Next(0,list.Count)).ToList();//need assgin return to the list 
+OrderBy() does not sort the IEnumerable that you input, but returns a new IOrderedEnumerable
+
+ 
+You should return result from list.OrderBy(x => x.level) to the same list:
+
+list = list.OrderBy(x => x.level).ToList();
