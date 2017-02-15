@@ -149,3 +149,6 @@ OrderBy() does not sort the IEnumerable that you input, but returns a new IOrder
 You should return result from list.OrderBy(x => x.level) to the same list:
 
 list = list.OrderBy(x => x.level).ToList();
+2017-2-15
+To beak the gameobjects connection to the prefab you can select the gameobject and go into the menu Gameobject -> Beak Prefab Instance.
+
