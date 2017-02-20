@@ -63,6 +63,7 @@ summary
     学习git的基本原理，框架，能够对分支进行合并和管理。
 12. NoSQL 的种类
 2017-01-03
+
 1. vuforia unity3d tutorial --for AR
 2. flask admin 
 3. LeaderBoard ref: https://www.1and1.com/cloud-community/learn/database/redis/how-to-implement-a-simple-redis-leaderboard/
@@ -152,3 +153,5 @@ list = list.OrderBy(x => x.level).ToList();
 2017-2-15
 To beak the gameobjects connection to the prefab you can select the gameobject and go into the menu Gameobject -> Beak Prefab Instance.
 
+here is a powershell script to list all installed softwares from pc:
+get-wmiobject -class win32reg_addremoveprograms | select DisplayName
