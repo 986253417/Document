@@ -197,8 +197,5 @@ BaseSkill * ResovelSkill(SkillType type);
 std::Map<int , const IBaseSkillFactory*> mSkillFactoryDic;
 Std::Map<int,const BaseSkill*> mSkillDic;
 }
-
-
-
-
-
+使用new 关键字申请内存空间的时候需要assert   check 是否成功申请。
+在函数的参数是传递的是指针的时候在使用前要check 是否为nullptr;
