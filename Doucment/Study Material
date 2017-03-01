@@ -155,3 +155,50 @@ To beak the gameobjects connection to the prefab you can select the gameobject a
 
 here is a powershell script to list all installed softwares from pc:
 get-wmiobject -class win32reg_addremoveprograms | select DisplayName
+2017-3-1
+C++ 谁负责new 谁负责delete
+每个对象的结构是前一部分是基类的，后一部分是自己的， 虚表。子类向父类转型dynamic_cast
+数值类型转型比如enum 转成int 使用static_cast<int>(enum);
+如果一个类只是new 了但是是作为返回值供外部使用， 那么就是谁接受的地方负责释放delete.
+
+class IBaseSkillFactory
+{
+public:
+IBaseSkillFactory();
+virtual ~IBaseSkillFactory();
+virtual BaseSkill *CreateSkill(std::string name) const=0;
+
+};//在source文件中即.cpp中要实现构造函数和析构函数，否则编译会链接出错
+//using template factory to create product
+template<class T> //where T: BaseSKill
+class SkillFactory:public IBaseSkillFactory
+{
+public: 
+SkillFactory();
+~SkillFactory();
+virtual BaseSkill * CreateSkill(std::string name) const
+{
+return dynamic_cast<BaseSkill *>(new T(name));
+}
+}；
+
+SkillManager maintian  all SkillFatory Instance
+
+classs SkillsManager{
+public:
+SkillManager();
+void RegisterSkillFactory(SkillType type,const IBaseSkillFactory *skillFactory);
+void UnRegisterSkillFactory(SkillType type);
+BaseSkill* GetSkill(SkillType type);
+~SkillManager();
+Private:
+BaseSkill * ResovelSkill(SkillType type);
+//store factory to product produect
+std::Map<int , const IBaseSkillFactory*> mSkillFactoryDic;
+Std::Map<int,const BaseSkill*> mSkillDic;
+}
+
+
+
+
+
