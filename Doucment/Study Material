@@ -210,3 +210,8 @@ c# 中将string 转成枚举类型， Enum.parse(typeof(),string)
 button 添加addLister后在设置button inactive 之前需要RemoveListener.
 
 List 转成array， 使用List.ToArray()
+
+unity 可以使用CanvasGroup 来show and hide gameobject
+private CanvasGroup group = GetComponent<CanvasGroup>();
+group.alpha =1; //show
+group.alpha =0;//hide
