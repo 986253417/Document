@@ -204,6 +204,7 @@ Std::Map<int,const BaseSkill*> mSkillDic;
 覆盖是指在基类的函数中加了virtual关键字
 重写是指不使用父类的同名函数，子类重新写一一个实现
 
+递归如果没有出口，就会造成栈溢出。
 2017-3-8
 c# 中将string 转成枚举类型， Enum.parse(typeof(),string)
 button 添加addLister后在设置button inactive 之前需要RemoveListener.
