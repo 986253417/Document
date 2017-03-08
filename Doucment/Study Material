@@ -199,3 +199,13 @@ Std::Map<int,const BaseSkill*> mSkillDic;
 }
 使用new 关键字申请内存空间的时候需要assert   check 是否成功申请。
 在函数的参数是传递的是指针的时候在使用前要check 是否为nullptr;
+
+重载
+覆盖是指在基类的函数中加了virtual关键字
+重写是指不使用父类的同名函数，子类重新写一一个实现
+
+2017-3-8
+c# 中将string 转成枚举类型， Enum.parse(typeof(),string)
+button 添加addLister后在设置button inactive 之前需要RemoveListener.
+
+List 转成array， 使用List.ToArray()
