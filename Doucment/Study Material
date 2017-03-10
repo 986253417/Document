@@ -215,3 +215,8 @@ unity 可以使用CanvasGroup 来show and hide gameobject
 private CanvasGroup group = GetComponent<CanvasGroup>();
 group.alpha =1; //show
 group.alpha =0;//hide
+
+2017-3-10
+c++
+std::Move()可以将左值转成右值，左值有名字有地址， 右值没名字也没有地址。 string存在常量区。
+浅拷贝只针对基本类型，不对复杂类型。在构造函数中不能调用纯虚函数，因为在创建对象的时候会创建虚表。
