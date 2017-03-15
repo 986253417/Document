@@ -1,0 +1,4 @@
+https://www.devbean.net/2011/03/from_cpp_to_objc_3/
+
+oc 中只有public 继承
+在 Objective-C 中，只有成员数据可以是private，protected和public的，默认是protected。方法只能是public的
