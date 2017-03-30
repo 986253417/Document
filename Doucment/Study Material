@@ -230,3 +230,4 @@ std::stringstream 可以用来split 一个带空格的字符串。
 
 c++ string类可以使用初始化列表来初始化一个对象。   string temp ={"dfdfdfba"}；
 c# 实现sorted linklist 时，要一分为三， 针对first/end/middle 部分的插入与删除。
+c# 中如何创建.asset 文件； 类需要继承ScriptableObject , 然后加上[CreateAssetMenu]属性给类。
