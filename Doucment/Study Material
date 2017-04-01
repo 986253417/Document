@@ -254,5 +254,8 @@ void PostProcessPlayer.PostProcessInput()
 
 }
 
-
+default(T) 
+default keyword will return null for reference types and zero for numeric value types.
+For structs, it will return each member of the struct initialized to zero or null depending on 
+whether they are value or reference types.
 
