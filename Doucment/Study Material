@@ -239,3 +239,20 @@ protected IEnumerator Example()
 yield return StartCorountine(AnotherExample); //this will executed end before execute next code
 //next code
 }
+
+public interface PostProcessPlayer
+{
+void PostProcessInput();
+}
+public class PandemicPlayer:PostProcessPlayer
+{
+//using class bind to function
+void PostProcessPlayer.PostProcessInput()
+{
+
+}
+
+}
+
+
+
