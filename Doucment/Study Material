@@ -233,3 +233,9 @@ c# 实现sorted linklist 时，要一分为三， 针对first/end/middle 部分�
 c# 中如何创建.asset 文件； 类需要继承ScriptableObject , 然后加上[CreateAssetMenu]属性给类。
 2017-4-1
 c# AssetsBundle使用Ienumeartor 来实现download 资源的过程， moveNext() return true , 将会继续迭代list ， moveNext() return false， 终止迭代。
+protected IEnumerator Example()
+{
+//previos code
+yield return StartCorountine(AnotherExample); //this will executed end before execute next code
+//next code
+}
