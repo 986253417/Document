@@ -263,3 +263,5 @@ whether they are value or reference types.
 c# 的数据类型分为两个部分： 值类型（简单类型， 结构类型， 枚举类型）和引用类型（类，数组，接口，代理delegate）。
 C# 中的所有类型都是直接或间接地从Object 类中继承。
 string类（字符串操作） 
+Oracle virtual box  如何导入已有的.vdi 文件。 参考：http://blog.csdn.net/wanghai__/article/details/6703923
+all in all 在新建虚拟电脑时 《使用已有的虚拟硬盘文件》
