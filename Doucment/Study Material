@@ -268,3 +268,28 @@ all in all 在新建虚拟电脑时 《使用已有的虚拟硬盘文件》
 
 批量处理日文翻译
 xshell 的使用
+2017-4-13
+c# 使用IEumerable 来一行一行的读取文件到内存而不是一次性全部读入内存， 这样会比较好
+StreamReader 
+StreamWriter
+FileStream
+判断是否读完一个文件使用while(!reader.EndOfStream)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
