@@ -78,5 +78,6 @@ Index is a view of your working directory that is ready for commit. It can be se
   http://iissnam.com/progit/html/zh
   
  
+ git 若果远程仓库的url 变了， 本地现在之前的工程中git clone转换到新的远程url ， 然后使用git remote -v 查看，然后使用git remote set-url origin 新url（\\cncduw001\dark 要转成//cncduw001/dark）
  
  
