@@ -282,7 +282,7 @@ var jsonObj = JObject.Parse(jsonTxt);
 example : InputConfig config = jsonObj["input"].ToObject<InputCOnfig>();
 
 
-
+TCP 使用长度标识或分隔符来分割不同的request. 因为tcp 有boundary。 使用长度： 比如一个request第一个包中包含剩余整个request 的长度。第二个包包含剩余整个该接受的长度。
 
 
 
