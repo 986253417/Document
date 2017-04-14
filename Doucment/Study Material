@@ -274,8 +274,12 @@ StreamReader
 StreamWriter
 FileStream
 判断是否读完一个文件使用while(!reader.EndOfStream)
+2017-3-14
+c# read json file 
+1. string jsonTxt = File.ReadAllText(jsonConfigFilePath);
+var jsonObj = JObject.Parse(jsonTxt);
 
-
+example : InputConfig config = jsonObj["input"].ToObject<InputCOnfig>();
 
 
 
