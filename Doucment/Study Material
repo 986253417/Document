@@ -297,8 +297,10 @@ represents a thread-safe first in-first out (FIFO) collection.
 无法获取的，这样就不会出现两个以上的线程同时去取同一个元素。这就是线程安全的， 而BlockingCollection<T> 就是线程的。 但是CocurrentQueue<T>就是不安全，
 当多个线程同时去取元素A执行的时候，第二个线程去取的时候会将第一线程先取到A元素的执行cancel掉。
 
+c++ boost：：bind() 的使用，其中_1, 或者_2 是占位符，表示后面的参数会填充。0x表示的是十六进制， goto 语句会将顺序执行的控制权转交给goto 语句的中去， 而顺序执行在
+goto 语句之后的代码是不会被执行的。
 
-
+http://www.boost.org/doc/libs/1_63_0/libs/bind/doc/html/bind.html
 
 
 
