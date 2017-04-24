@@ -305,6 +305,13 @@ http://www.boost.org/doc/libs/1_63_0/libs/bind/doc/html/bind.html
 
 mysql  and memcached
 
+2017-4-24
+Map::lower_bound
+Map::Upper_bound
+
+Boost::ref(the Ref libarary is a smmall library that is useful for passing references to function templates(algorithms) that would usually take copies of their arguments)
+the expression boost::ref(x) returns a boost::reference_wrapper<X>(x) where X is the type of x. similarly, 
+boost::cref(x) returns a boost::reference_wrapper<X const> (x).
 
 
 
