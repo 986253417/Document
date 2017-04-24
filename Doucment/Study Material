@@ -309,10 +309,12 @@ mysql  and memcached
 Map::lower_bound
 Map::Upper_bound
 
+
+map中已经插入了1，2，3，4的话，如果lower_bound(2)的话，返回的2，而upper_bound（2）的话，返回的就是3
+
 Boost::ref(the Ref libarary is a smmall library that is useful for passing references to function templates(algorithms) that would usually take copies of their arguments)
 the expression boost::ref(x) returns a boost::reference_wrapper<X>(x) where X is the type of x. similarly, 
 boost::cref(x) returns a boost::reference_wrapper<X const> (x).
-
 
 
 
