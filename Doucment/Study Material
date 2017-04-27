@@ -317,7 +317,7 @@ the expression boost::ref(x) returns a boost::reference_wrapper<X>(x) where X is
 boost::cref(x) returns a boost::reference_wrapper<X const> (x).
 
 
-
+UML https://www.ibm.com/developerworks/rational/library/content/RationalEdge/sep04/bell/index.html?ca=drs-
 
 
 
