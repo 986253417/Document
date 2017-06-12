@@ -307,14 +307,281 @@ ISession session = cluster.Connect("demo");
 
 
  
- 
+ IGlobalRepo.cs
+
+using CSDBService.Cassandra;
+using CSStandaloneServer.DTO.Data;
+using ServiceStack.Redis;
+using System;
+using System.Collections.Generic;
+
+namespace CSStandaloneServer.Repository
+{
+    public interface IGlobalRepo
+    {
+        void InsertGlobalParam(GlobalParam param);
+        GlobalParam GetGlobalParam(string name);
+        List<GlobalParam> AllGlobalParams();
+        void UpdateGlobalParam(string name, GlobalParam param);
+        void DeleteGlobalParam(string name);
+
+        void InsertCDNRootConf(CDNRootConf conf);
+        CDNRootConf GetCDNRootConf(string srcType);
+        List<CDNRootConf> AllCDNRootConfs();
+        void UpdateCDNRootConf(string srcType, CDNRootConf param);
+        void DeleteCDNRootConf(string srcType);
+    }
+
+    public class GlobalRepo : IGlobalRepo
+    {
+        private CassandraService Cassandra { get; set; }
+        private GloablParamMapper globalmapper { get; set; }
+        private CDNRootPathConfigMapper cdnmapper { get; set; }
+        public GlobalRepo(CassandraService service)
+        {
+            this.Cassandra = service;
+            globalmapper = new GloablParamMapper();
+            cdnmapper = new CDNRootPathConfigMapper();
+        }
+        public List<CDNRootConf> AllCDNRootConfs()
+        {
+            //CDNRootPathConfigMapper mapper = new CDNRootPathConfigMapper();
+            List<CDNRootPathConfigMapper> temp = cdnmapper.All(this.Cassandra.Session);
+            var rst = new List<CDNRootConf>();
+            foreach (var item in temp)
+            {
+                var data = new CDNRootConf()
+                {
+                    SrcType = item.SrcType,
+                    RootPrefix = item.RootPrefix
+                };
+                rst.Add(data);
+            }
+            return rst;
+        }
+
+        public List<GlobalParam> AllGlobalParams()
+        {
+            List<GloablParamMapper> temp = globalmapper.All(this.Cassandra.Session);
+            var rst = new List<GlobalParam>();
+            foreach (var item in temp)
+            {
+                var data = new GlobalParam()
+                {
+                    Name = item.Key,
+                    Value = item.Value
+                };
+                rst.Add(data);
+            }
+            return rst;
+        }
+
+        public void DeleteCDNRootConf(string srcType)
+        {
+            //CDNRootPathConfigMapper mapper = new CDNRootPathConfigMapper();
+            cdnmapper.Delete(this.Cassandra.Session, srcType);
+        }
+
+        public void DeleteGlobalParam(string name)
+        {
+            globalmapper.Delete(this.Cassandra.Session, name);
+        }
+
+        public CDNRootConf GetCDNRootConf(string srcType)
+        {
+            CDNRootPathConfigMapper temp = cdnmapper.Query(this.Cassandra.Session, srcType);
+            CDNRootConf cdnconf = new CDNRootConf();
+            cdnconf.SrcType = temp.SrcType;
+            cdnconf.RootPrefix = temp.RootPrefix;
+            return cdnconf;
+        }
+
+        public GlobalParam GetGlobalParam(string name)
+        {
+            var rst = new GlobalParam();
+            var temp = globalmapper.Query(this.Cassandra.Session, name);
+            rst.Name = temp.Key;
+            rst.Value = temp.Value;
+            return rst;
+        }
+
+        public void InsertCDNRootConf(CDNRootConf conf)
+        {
+            CDNRootPathConfigMapper data = new CDNRootPathConfigMapper();
+            data.SrcType = conf.SrcType;
+            data.RootPrefix = conf.RootPrefix;
+            data.Insert(this.Cassandra.Session, data);
+        }
+
+        public void InsertGlobalParam(GlobalParam param)
+        {
+            var datamapper = new GloablParamMapper();
+            datamapper.Key = param.Name;
+            datamapper.Value = param.Value;
+            datamapper.Insert(this.Cassandra.Session, datamapper);
+        }
+        public void UpdateCDNRootConf(string srcType, CDNRootConf param)
+        {
+            globalmapper.Update(this.Cassandra.Session, param.SrcType, param.RootPrefix);
+        }
+
+        public void UpdateGlobalParam(string name, GlobalParam param)
+        {
+            cdnmapper.Update(this.Cassandra.Session, param.Name, param.Value);
+        }
+    }
+}
 
 
 
 
+IAppVersionRepo.cs
 
 
+using CSDBService.Cassandra;
+using CSStandaloneServer.Data.AppVersion;
+using CSStandaloneServer.DTO.Data;
+using ServiceStack.Redis;
+using System.Collections.Generic;
 
+namespace CSStandaloneServer.Repository.AppVersion
+{
+    public interface IAppVersionRepo
+    {
+        #region Client
+        List<AppVersionData> GetPatchInfo(string clientAppVersion);
+        #endregion
+
+        #region Admin
+        void InsertAppVersion(AppVersionData data); //make app version
+        void GeneratePatch(GamePatchData rcd); //upload patch
+        void ActiveVersionPatch(string appversion, long patchId); //active version corresponding patch
+        List<AppVersionData> GetAppVersionHistory();
+        List<GamePatchData> GetVersionPatch(string appVersion);
+        #endregion
+    }
+
+    public class AppVersion : IAppVersionRepo
+    {
+        private readonly string serverAppVersionKey = "server_app_version";
+        private CassandraService Cassandra { get; set; }
+        private AppVersionMapper appversionMapper { get; set; }
+        private AppGamePatchMapper gamepatchMapper { get; set; }
+        private AppVersionCreatedHistoryMapper createdHistoryMapper { get; set; }
+        public AppVersion(CassandraService service)
+        {
+            this.Cassandra = service;
+            appversionMapper = new AppVersionMapper();
+            gamepatchMapper = new AppGamePatchMapper();
+            createdHistoryMapper = new AppVersionCreatedHistoryMapper();
+        }
+        #region Client
+        public List<AppVersionData> GetPatchInfo(string clientAppVersion)
+        {
+            /*
+            1. according client appversion, get the Create_time
+            2. according the sever appVersion ,get the create_time
+            according the Create_time to get two version from app_version_create_rcd table
+            (clientVersion,serverVersion]
+            queryall 
+            convert to List<AppversionData>
+            */
+            GlobalRepo globalInstance = new GlobalRepo(this.Cassandra);
+            var globalParam = globalInstance.GetGlobalParam(serverAppVersionKey);//read from config need
+
+            var startAppVersion = appversionMapper.Query(this.Cassandra.Session, clientAppVersion);
+            var serverAppVersion = appversionMapper.Query(this.Cassandra.Session, globalParam.Value);
+
+            var versionPatchList = createdHistoryMapper.Query(this.Cassandra.Session,startAppVersion.CreatedTS, serverAppVersion.CreatedTS);
+            var rst = new List<AppVersionData>();
+            foreach (var item in versionPatchList)
+            {
+               var temp =  appversionMapper.Query(this.Cassandra.Session, item.App_Version);
+                var data = new AppVersionData()
+                {
+                    CreatedTime = temp.CreatedTS,
+                    Version = temp.Version,
+                    Description = temp.Desc,
+                    Patch = temp.Patch
+                };
+                rst.Add(data);
+            }
+            return rst;
+        }
+        #endregion
+
+        #region Admin tool
+        public void InsertAppVersion(AppVersionData data)
+        {
+            AppVersionMapper mapper = new AppVersionMapper();
+            mapper.Version = data.Version;
+            mapper.CreatedTS = data.CreatedTime;
+            mapper.Desc = data.Description;
+            mapper.Patch = data.Patch;
+            mapper.Insert(this.Cassandra.Session, mapper);
+
+            //if success, record upload app version in app_version_create_rcd table
+            AppVersionCreatedHistoryMapper rec = new AppVersionCreatedHistoryMapper();
+            rec.App_Version = data.Version;
+            rec.Created_TS = data.CreatedTime;
+            rec.Insert(this.Cassandra.Session, rec);
+        }
+
+        public void GeneratePatch(GamePatchData rcd)
+        {
+            AppGamePatchMapper mapper = new AppGamePatchMapper();
+            mapper.App_Version = rcd.GameAppVersion;
+            mapper.Upload_TS = rcd.UploadTimes;
+            mapper.Insert(this.Cassandra.Session, mapper);
+        }
+    
+        public void ActiveVersionPatch(string appversion, long patchId)
+        {
+            appversionMapper.Update(this.Cassandra.Session, appversion, patchId);
+            //need upate the app version on global param after activing
+            GlobalRepo temp = new GlobalRepo(this.Cassandra);
+            GlobalParam obj = new GlobalParam();
+            obj.Name = serverAppVersionKey;
+            obj.Value = appversion;
+            temp.UpdateGlobalParam(appversion,obj);
+        }
+
+        public List<AppVersionData> GetAppVersionHistory()
+        {
+            List<AppVersionMapper> temp = appversionMapper.All(this.Cassandra.Session);
+            var rst = new List<AppVersionData>();
+            foreach (var item in temp)
+            {
+                var data = new AppVersionData()
+                {
+                    CreatedTime = item.CreatedTS,
+                    Version = item.Version,
+                    Description = item.Desc,
+                    Patch = item.Patch
+                };
+                rst.Add(data);
+            }
+            return rst;
+        }
+
+        public List<GamePatchData> GetVersionPatch(string appVersion)
+        {
+            List<AppGamePatchMapper> temp = gamepatchMapper.Query(this.Cassandra.Session, appVersion);
+            var rst = new List<GamePatchData>();
+            foreach (var item in temp)
+            {
+                var data = new GamePatchData()
+                {
+                    GameAppVersion = item.App_Version,
+                    UploadTimes = item.Upload_TS
+                };
+                rst.Add(data);
+            }
+            return rst;
+        }
+        #endregion
+    }
+}
 
 
 
