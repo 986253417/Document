@@ -1,0 +1,320 @@
+逻辑data model 数据 和数据层数据 （对应的property是一样的）
+逻辑层数据是给上层用的
+数据层数据是database的字段model
+c#的sqlite中
+using (var conn = new SQLiteConnection("Data Source=" + dbName + ";Version=3;"))
+            {
+                conn.Open();
+                string checkstr = "select *from envconfig where envType = @envtype";
+                SQLiteCommand command1 = new SQLiteCommand(checkstr, conn);
+                command1.Parameters.AddWithValue("@envtype", data.EnvType);
+                var reader = command1.ExecuteReader();
+				reader.close();// this must be indicate, without this line database file will remain locked even use using 字段 
+                result = (reader.Read() && (reader != null));
+                reader.Close();
+            }
+
+
+
+@*@inherits ViewPage<CSAdmin.EnvServices.EnvConfigService.EnvConfigResponse>*@
+@{
+    Layout = null;
+    var EnvList = base.Gateway.Send(new CSAdmin.EnvServices.EnvConfigService.GetAllEnvConfigs()).EnvConfigList;
+}
+
+<html>
+<body>
+    <div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-info btn-group-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                SwitchEnv
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                @foreach (var env in EnvList)
+                {
+                    <li><a class="env_btn" href="#" id="@env.Key">@env.Key </a></li>
+
+                }
+            </ul>
+        </div>
+
+    </div>
+    <div class="container">
+        <h1>@ViewBag.Title</h1>
+        @RenderBody()
+    </div>
+
+
+    <script>
+        $(".env_btn").click(function () {
+            var env = $(this).text();
+            var url = window.location.origin + "/EnvConfig/" + env;
+            $.get(url).done(function () {
+                window.location.href = url;
+            });
+        })
+    </script>
+</body>
+</html>
+
+
+html里按F12可以debug网页
+
+<script>
+    $(function () {
+        $("#DeleteEnvType").on('change', (function () {
+            var entype = $(this).val();
+            var DeleteParameter = $('#DeleteParameter');
+            $('option', DeleteParameter).filter(function () {
+                document.getElementById("DeleteParameter").value = "";
+                if ($(this).attr('data-group') == entype
+            ) {
+                   
+                    console.log("entype=" + entype);
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+
+        }));
+        $('#DeleteEnvType').trigger('change');
+
+    });</script>
+
+
+
+
+
+public abstract class EventBody { }
+
+public class SubEventBody : EventBody
+{
+    public string Src { get; set; }
+    public string FileName { get; set; }
+}
+
+public class SubEventBody1 : EventBody
+{
+    public string Src { get; set; }
+    public string FileName { get; set; }
+}
+
+
+public class SpecificBody
+{
+  public SubEventBody body { get; set; }
+}
+public class SpecificBody1
+{
+  public SubEventBody1 body { get; set; }
+}
+
+
+1：定义一个class继承body（比如叫class B)，2使用时创建一个event类，其中的body指向那个class B
+
+<form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="map_name">Map Name</label>
+            <input type="text" class="form-control" id="map_name" name="Name" placeholder="Official Map Name">
+        </div>
+        <div class="form-group">
+            <label for="map_desc">Map Description</label>
+            <input type="text" class="form-control" id="map_desc" name="Desc" placeholder="Official Map Description">
+        </div>
+        <div class="form-group">
+            @Html.Label("UploadFile")
+            <input type="file" name="UploadFile" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+
+
+在cassandra中text文本使用单冒号，其实就是string
+
+insert into cdn_root_conf(source_type,bucket,root) values(1,'gamepatch','uploadpatch');
+
+https://codepen.io/DawsonMediaD/pen/byDqv
+  
+
+{
+public class GamePatchModel
+    {
+        public string AppVersion { get; set; }
+        public string UploadTime { get; set; }
+        public HttpPostedFileBase UploadedFile { get; set; }
+    }
+
+
+
+<div class="container">
+        <form role="form" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>AppVersion</label>
+                <input type="text" placeholder="v1.0.0" name="AppVersion">
+            </div>
+            <div class="form-group">
+                <label>Upload Game Patch</label>
+                <input type="file" name="UploadedFile">
+            </div>
+            <button type="submit" class="btn btn-primary" name="UpLoadGamePatch">UploadGamePatch</button>
+        </form>
+    </div>
+
+}
+2016-9-5
+1.how to create a servicestack service 
+NewProject--->ServiceStack----> ServiceStack Self Host With Razor
+2. 在servicestack 工程中如何添加配置文件，以及这些配置文件被工程使用到
+比如添加如下
+ 
+将这两个配置文件右键属性设置：Copy if newer 
+
+public AppHost()
+            : base("LogServer", typeof(AppHost).Assembly)
+        {
+            string basePath = System.AppDomain.CurrentDomain.BaseDirectory;
+            AppSettings = new MultiAppSettings(
+             new TextFileSettings(basePath + "/Config/log_server.config", "="),
+             new TextFileSettings(basePath + "/Config/default.config", "="),
+             new AppSettings()
+         );
+
+  public void StartSelf()
+        {
+            string host = AppSettings.GetString("logServer");
+            Init().Start(host);
+        }
+static void Main(string[] args)
+        {
+            new AppHost().StartSelf ();
+                         Console.ReadLine();
+        }
+        }
+
+2016-9-6
+
+
+
+
+
+
+ 
+                    <td><a href='@Url.Action("EditDes")?Version=@item.Version&CreatedTime=@item.CreatedTime&Description=@item.Description'>EditDes</a></td>
+以url传递model数据的时候不要添加空格，否则传过去的值是有空格值的
+
+using UnityEngine;
+
+namespace ServerProxy.Core
+{
+    /// <summary>
+    /// Singleton Pattern in Unity, don't attached in any gameobject, 
+    /// it will generate by itself
+    /// </summary>
+    /// <typeparam name="T">Subclass Type of Singleton</typeparam>
+    public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+    {
+        private static T sInstance;
+
+        public static T Instance
+        {
+            get
+            {
+                if (sInstance == null)
+                {
+                    sInstance = (T)FindObjectOfType(typeof(T));
+
+                    if (FindObjectsOfType(typeof(T)).Length > 1)
+                    {
+                        return sInstance;
+                    }
+
+                    if (sInstance == null)
+                    {
+                        GameObject singleton = new GameObject();
+                        singleton.name = string.Format("{0}_singleton", typeof(T).Name);
+                        sInstance = singleton.AddComponent<T>();
+                        DontDestroyOnLoad(singleton);
+                    }
+                }
+                return sInstance;
+            }
+        }
+
+        // Use this for initialization
+        void Start()
+        {}
+
+        // Update is called once per frame
+        void Update()
+        {}
+
+        /// <summary>
+        /// When application is quit, it will be invoke.
+        /// Release resource here
+        /// </summary>
+        void OnApplicationQuit()
+        {
+            if (sInstance != null)
+            {
+                Destroy(sInstance.gameObject);
+                sInstance = null;
+            }
+        }
+    }
+}
+
+
+Cassandra
+
+drop keyspace if exists cities_skyline_dev;
+
+// TODO: use NetworkTopologyStrategy instead of SimpleStrategy, need research more
+create keyspace cities_skyline_dev 
+	with replication = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
+
+use cities_skyline_dev;
+
+create table if not exists global_params (
+	name text,
+	value text,
+	primary key(name)
+);
+
+create table if not exists cdn_root_conf (
+    source_type int,
+    bucket text,
+    root text,
+    primary key(source_type)
+);
+
+insert into cdn_root_conf (source_type, bucket, root)
+values (0, 'cs-player-sharing', 'map');
+
+insert into cdn_root_conf (source_type, bucket, root)
+values (1, 'cs-official', 'map');
+
+
+can use c# code to connect cassandra db
+//connect to the demo keyspace on our cluster runing at 127.0.0.1
+Cluster cluster = Cluster.Builder().AddContactPoint("127.0.0.1").Build();
+ISession session = cluster.Connect("demo");
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
