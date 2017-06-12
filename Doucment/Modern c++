@@ -5,3 +5,173 @@ https://github.com/cppcon
 http://www.stroustrup.com/4th.html
 
 http://winkyao.com/2016/04/06/c-11-%E7%AC%94%E8%AE%B0/
+
+
+
+public event Action<TI> func;
+IEnumerable<CardColorId> cardColors= currentCity.DiseaseInfo.Where(item => item.Value > 0).Select(item => item.Key);
+        int index = random.Next(cardColors.Count());
+        return cardColors.ElementAt(index);
+//在IEnumerable 使用下标取出元素
+
+当一个初始化数据信息的函数被不同的地方使用时会被if check判断是否被初始化时，
+将初始化的check 条件移至这个初始化函数中进行判断。逆向思维。
+if(GameContext.PlayerCardPiles.DrawPile == null)
+        {
+            GameContext.PlayerCardPiles.InitializePlayerDeck();
+        }
+
+改为在InitializePlayerDeck中进行if判断（可以在类中加一个static bool 变量）
+
+c# Cloneable
+
+c++ 成员变量的初始化只与成员变量的定义有关，而与成员变量的初始化先后顺序无关
+C++ 有至少4种初始化方式（中括号，大括号，初始化列表），C++ 11使用初始化列表uniform initializer
+Static_Assert 在编译期间进行检查
+
+c++为每个类提供默认的拷贝构造函数和赋值运算符。
+委托构造函数
+   委托构造函数使用它所属类的其他构造函数执行它自己的初始化过程或者说它把它自己的一些（或者全部）职责委托给了其他构造函数
+Lambda
+[Capture list](parameter list) -> return type {function body}
+[Capture list]
+	[this] captures the this pointer by value
+	[&] captures all automatic variables in the body of the lambda by reference
+	[=] captures all automatic variables in the body of the lambda by value(this will not change the original itself ,it just change the copy temp variables)
+	[]captures nothing
+
+auto more safe
+//if vec.size() > INT_MAX overflow will occur 
+int size = vec.size();//oops 
+
+//modern c++ version
+//auto will force you initialize a varibale 
+auto shader_ref = Shader::load_from_file(file_name);
+shader_ref->compile(dev); //fine
+class Test{	
+// PersonType 作为Test类的一部分
+	enum PersonType { 	ADULT,CHILD,SENIOR };
+	void SetPersonType(PersonType person_type);
+	PersonType GetPersonType();
+	
+	auto GetPersonType()->PersonType;
+private:
+	PersonType mPersonType;
+};
+//编译器 不知道PersonType是什么，因为PersonType在Test类的外面使用，必须加类名和作用域
+Test::PersonType Test::GetPersonType()
+{
+	return mPersonType;
+}
+//使用auto,返回值出现在函数末端，而不是前端，所以不需要添加类的作用域
+auto Test::GetPersonType()->PersonType
+{
+	return mPersonType;
+}
+Always use nullptr for a null pointer value(函数指针和成员指针), never the literal 0 or the macro NULL which are ambiguous because they could be either an integer or a pointer.
+
+rvalue Reference
+std::move is not real move, it just cast an object to rvalue reference
+all parameters are lvalues
+In concept (though not always in practice), rvalues correspond to temporary objects returned from functions, while lvalues correspond to objects you can refer to, either by name or by following a pointer or lvalue reference.
+ 
+A useful heuristic to determine whether an expression is an lvalue is to ask if you can take its address. If you can, it typically is. If you can’t, it’s usually an rvalue.
+
+Copies of rvalues are generally move constructed, while copies of lvalues are usually copy constructed
+class Test1
+{
+public:
+	virtual std::string GetName() final;//disable inheritance
+};
+class SubTest1:public Test1
+{ 
+public:
+	std::string GetName() override;//compile time error  };
+rvalue refrerence
+// A class that contains a memory resource.  
+class MemoryBlock 
+{
+    // TODO: Add resources for the class here.  
+};
+void g(const MemoryBlock&)
+{
+    cout << "In g(const MemoryBlock&)." << endl;
+}
+void g(MemoryBlock&&)
+{
+    cout << "In g(MemoryBlock&&)." << endl;
+}
+int main()
+{
+    MemoryBlock block;
+    g(block);  //output: In g(const MemoryBlock&). 
+    g(std::move(block));//output: In g(MemoryBlock&&). 
+    g(MemoryBlock{});//output: In g(MemoryBlock&&)., in c++ 98 will match `const MemoryBlock&` version 
+} 
+std::move is not real move, it just cast an object to rvalue reference 
+
+A function that return by value, type of return statement and function return type is the same and return value must be stack allocated
+RVO (return value optimization)  -> if the return value is rvalue its RVO
+NRVO(named return value optimization) ->if the return value is lvalue(can refer it's name)    
+class Noisy {
+public:
+	Noisy() { std::cout << "constructed" << endl; }
+	Noisy(const Noisy&) { std::cout << "copy-constructed\n"; }
+	Noisy(Noisy&&) { std::cout << "move constructed" << endl; }
+	~Noisy() { std::cout << "destructed" << endl; }
+};
+Noisy f()  {
+	Noisy v{};//构造对象临时
+	return v;  }
+void g(Noisy arg)  { std::cout << "inside g" << endl; }
+int main()
+{   
+Noisy v = f(); // constructed, move constructed, destructed
+ g(f()); // constructed, move constructed, inside g, destructed
+system("pause");  return 0; }
+
+Move semantics
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2017-4-14
+volatile 和 mutable
+
+mutable interacts with const , if you have a const pointer, you normally could not change members, Mutable provides an exception to that rule.
+
+a variable marked  volatile tells the  compiler has to read or write the memory address every time and can't cache the content in a register.(volatile is also very useful when dealing with multithreading applications)
+
+
+
+
+
+
+
+
