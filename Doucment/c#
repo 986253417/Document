@@ -1,0 +1,309 @@
+//这个属性让internal class 可以在UnityEngine的namespace程序集中使用 （类似友元）
+[assembly: InternalsVisibleTo("UnityEngine")]
+namespace ConsoleApplication1
+{
+    internal class Product
+    {
+        internal void Function()
+        {
+
+
+        }
+}
+
+c# 的数据类型分为两个部分： 值类型(简单类型，枚举类型和结构类型)和引用类型（类，数组，接口和代理delegate）。
+
+c#中的所有类型都是直接或间接地从Object类中派生。
+
+装箱和拆箱(均使用拷贝赋值给对象)
+装箱转换是指将一个值类型隐式转换成一个object类型，或者是把这个值类型转换成一个被该值类型应用的接口类型（interface-type).
+拆箱转换是指将一个对象类型显示地转换成一个值类型，或是将一个接口类型显示地转换成一个执行该接口的值类型。
+
+常量就是其值固定不变的量。
+类型转换
+隐式转换（implicit conversions）和显示转换(explicit conversions)。
+显示转换需要用户明确地指定转换的类型。
+
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Translator.Inputs
+{
+    public class DirInputSource : IInputSource
+    {
+        readonly string DirPath;
+        readonly List<string> Postfix;
+        public DirInputSource(string alias, string dirPath, List<string> postfix)
+        {
+             Postfix = new List<string>();
+            this.Alias = alias;
+            this.DirPath = dirPath;
+            this.Postfix = postfix;
+        }
+
+        public string Alias { get; private set; }
+
+        public static List<InputSourceMsg> MsgList = new List<InputSourceMsg>();
+        public IEnumerable<InputSourceMsg> Msgs
+        {
+            get
+            {
+                if (IsValid(this.DirPath))
+                {
+                    //List<string> files = GetPathsByDir(DirPath);
+                    //foreach (string file in files)
+                    //{
+                    //    var rst = ReadFrom(file);
+                    //    foreach (InputSourceMsg msg in rst)
+                    //    {
+                    //        yield return msg;
+                    //    }
+                    //}
+                    var rst =  GetContents();
+                    foreach (InputSourceMsg msg in rst)
+                    {
+                        yield return msg;
+                    }
+                }
+            }
+        }
+
+        private bool IsValid(string DirPath)
+        {
+            if (string.IsNullOrEmpty(DirPath))
+            {
+                return false;
+            }
+           
+            return Directory.Exists(DirPath);
+        }
+
+      
+        //get all files path which match postfix
+        private List<string> GetPathsByDir(string dirPath)
+        {
+            List<string> rst = new List<string>();
+            if (IsValid(dirPath))
+            {
+                foreach (string item in this.Postfix)
+                {
+                    var temp = Directory.GetFiles(dirPath, "*" + item, SearchOption.AllDirectories).ToList();
+                    rst.AddRange(temp);
+                }
+            }
+            return rst;
+        }
+
+        //for one file
+        private IEnumerable<InputSourceMsg> ReadFrom(string path)
+        {
+            string line;
+            int num = 0;
+            using (StreamReader reader = new StreamReader(path))
+            {
+                while ((line = reader.ReadLine()) != null)
+                {
+                    num++;
+                    InputSourceMsg Newrecord = new InputSourceMsg
+                    {
+                        FileNamePath = path,
+                        LineNum = num,
+                        Msg = line
+                    };
+                    yield return Newrecord;
+                }
+            }
+        }
+
+        #region use recursion to get files content method two
+        private bool IsFileValid(string path)
+        {
+            if (string.IsNullOrEmpty(DirPath))
+            {
+                return false;
+            }
+            if (File.Exists(path))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private IEnumerable<InputSourceMsg> GetContents()
+        {
+            List<string> Files = Directory.GetFileSystemEntries(this.DirPath).ToList();
+            foreach (string file in Files)
+            {
+                string fileName = file.Replace("\\", "//");
+                var rst = this.GetContent(fileName);
+                foreach (InputSourceMsg msg in rst)
+                {
+                    yield return
+                         msg;
+                }
+            }
+        }
+
+        private bool IsValidPostfix(string filePath)
+        {
+            string postfix = Path.GetExtension(filePath);
+
+            if (postfix.Contains(postfix))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //recursion
+        private IEnumerable<InputSourceMsg> GetContent(string filePath)
+        {
+            //if file is a directory or file
+            #region file
+            //it is a file
+            if (File.Exists(filePath))
+            {
+                //check it is only for 
+                if (IsValidPostfix(filePath))
+                {
+                    var result = ReadFrom(filePath);
+                    foreach (InputSourceMsg obj in result)
+                    {
+                        yield return obj;
+                    }
+                }
+            }
+            #endregion file
+            else if (Directory.Exists(filePath))
+            {
+                if (this.IsValid(filePath))
+                {
+                    foreach (string subFile in Directory.GetFileSystemEntries(filePath))
+                    {
+                        this.GetContent(subFile);
+                    }
+                }
+            }
+        }
+        #endregion
+    }
+
+}
+
+
+static IEnumerable<string> TTTS()
+        {
+            string[] ps = {
+                "translator.json",
+                "translator.json"
+            };
+            foreach(var p in ps)
+            {
+                var tt = TTT(p);
+                foreach (var l in tt)
+                {
+                    yield return l;
+                }
+            }
+        }
+
+        static IEnumerable<string> TTT(string path)
+        {
+            using (StreamReader r = new StreamReader(path))
+            {
+
+                string v = r.ReadLine();
+                yield return v;
+            }
+        }
+2017-4-14
+flow:
+1. Read Json configuration file , mapper to class 
+2. verify the config is correct or not
+3. Read input source 
+4. Filter them to make them match condition
+5. translate by google
+6. out put it to csv or xlsl 
+(step 5 and 6 use the same IEnumerable<InputLineResult> rsts)
+
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using Translator.Inputs;
+
+namespace Translator
+{
+    public class InputLineResult
+    {
+        public InputSourceMsg Input { get; set; }//this is used by Filter
+
+        readonly Dictionary<string, string> Fields //this save all translated info
+            = new Dictionary<string, string>();
+
+        public InputLineResult(InputSourceMsg input)
+        {
+            this.Input = input;
+
+            var props = this.Input.GetType().GetProperties(
+                BindingFlags.Instance | BindingFlags.Public 
+                | BindingFlags.DeclaredOnly);
+
+            foreach(var prop in props)
+            {
+                AddOrUpdate(prop.Name, prop.GetValue(this.Input).ToString());
+            }
+        }
+
+        public void AddOrUpdate(string key, string value)
+        {
+            Fields[key] = value;
+        }
+
+        public string this[string key]
+        {
+            get
+            {
+                return Fields.ContainsKey(key) ? 
+                    Fields[key] : string.Empty;
+            }
+        }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this.Fields);
+        }
+    }
+}
+
+c# 读取json 文件
+Newtonsoft.Json.Linq;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
