@@ -172,6 +172,809 @@ a variable marked  volatile tells the  compiler has to read or write the memory 
 
 
 
+	class
+◦	member
+◦	static/const
+◦	virtual functions
+◦	overload, override, overwrite
+◦	inheritance & composition
+◦	Multiple inheritance
+◦	Friend
+	Simple design pattern
+◦	Interface
+◦	Singleton
+◦	Factory
+◦	Callback
+◦	Abstraction
+	Template
+◦	Function template
+◦	Class template
+	Memory
+◦	Concept
+◦	Utility
+◦	practice
+	Overflow
+	STL
+◦	Container – array
+◦	Container – list 
+◦	Container – map
+	Good practice
+◦	assert
+◦	Ambiguous
+◦	Duplicated code
+◦	Referenced/Const parameters
+◦	No hardcode
+
+
+
+
+
+
+
+Category
+	1	Class
+	2	Design pattern
+	3	Template
+	4	STL
+	5	Memory
+	6	Overflow
+	7	Good practices 
+Class - members
+	Public, projected or private
+◦	Usually, all the member variables should be declared as protect or private.
+	Protect it from the out side.
+	Private it from the derived if necessarily.
+	It’s easier to monitor and validate your member variables from being modified.
+	It’s easier for you to upgrade your class if you want to do rename or remove.
+◦	Only expose the interfaces that are necessarily to be so.
+	It’s easier and more straightforward for the others to use your class.
+	It prevents the others from misusing your class by calling the internal functions that may against your design.
+	It’s easier for you to upgrade your class by modifying the internal functions but still keeping the same exposed interfaces.
+
+Class - static
+	Static members
+		class Base
+		{
+		public:
+		  static int msValue;
+		};
+◦	Scope: It’s working for one class instead of one instance.
+	Base:: msValue;
+	pBase-> msValue;
+◦	Initialization
+	In cpp file.
+		intBase::msValue = 0;
+	in h file for static const int/char/etc.
+		static const int iValue = 0;	(Not recommended)
+◦	Derived class share the static members from Base class. 
+	Base:: msValue;
+	Derived:: msValue;
+Class - static
+
+◦	It can be the default parameter for the functions.
+		 void foo(int i = msValue)
+◦	Self typed variable as static member
+		class Base
+		{
+		static Base mBase;	
+		};
+		Not recommended due to initializing order.
+Class - static
+
+	Static in template class
+	The static member belongs to the generated template class.
+	template<class T>
+	class ISingleton 
+	{
+	public:
+		static intsType;
+		static T*sInstance;
+	};
+	class SingletonObjectA: public ISingleton<SingletonObjectA>
+	{
+	};
+	template<> int ISingleton<SingletonObjectA>::sType = 1; 
+	template<> SingletonObjectA * ISingleton<SingletonObjectA>::sInstance = 0; 
+	class SingletonObjectB: public ISingleton<SingletonObjectB>
+	{
+	};
+	template<> int ISingleton<SingletonObjectB>::sType = 2; 
+	template<> SingletonObjectB * ISingleton<SingletonObjectB>::sInstance = 0; 
+
+Class - static
+	Static instance
+		static Object sObject; 
+	It is not recommended. (The same for global instance)
+	Random Initializing order
+	The initializing order for the static instances is not controllable. It would conflict if one static instance depends on another.
+Class - const
+	As member
+◦	Can not be modified.
+◦	Can be initialized in initializing list.
+		Object()
+		: mValue(0)
+		{
+		}		
+	As function parameter
+◦	Can not be modified in functions.
+		void foo(const Object* object)
+Class - const
+
+	As function return
+◦	Can not be modified by the user.
+		const Object* getObject()
+	As function postfix
+	Can not modify member variables.
+	void foo() const 
+◦	Except the mutable variable.
+
+Class - const
+	Practices
+	Please use it as mush as possible when the target variables and instances are not allowed or not necessary to be modified.
+	It helps to target unexceptional modification.
+	It keeps your instance in safe and avoid unnecessary bugs.
+Class - Virtual functions
+	Virtual functions
+	class Base
+	{
+	public:
+		virtual void foo() {	cout<<"Base::foo()"<<endl;	}
+	};
+	class Derived: public Base
+	{
+	public:
+	 	virtual void foo() {	cout<<"Derived::foo()"<<endl;	}
+	};
+子类想要某些自己的行为比如同样的一个function 在子类中表现不同于基类
+Class - Virtual functions
+	vftable & vptr 
+
+ 
+
+子类自己定义的虚函数会在基类虚函数的后面排序，如果子类中有基类的同名的虚函数将使用子类自己的即上图中的&A：：fun1/fun2
+Class - Virtual functions
+	Pure virtual function
+		virtual void foo() = 0; 
+	Abstract class
+◦	The class contains pure virtual function.
+◦	It can not be instanced.
+Class - Virtual functions
+	Practice
+◦	Virtual destructor
+	virtual ~Base(); 
+◦	Always write Virtual keyword
+◦	No virtual function calling inside Constructor&destructor.（为什么， 因为在调用父类的构造函数的时候， this指针还不是自己） 
+◦	It can’t be virtual for a static function.
+The inline function is actually not inline if it’s declared as virtual
+Class Overload, Override, Overwrite
+◦	Overload (重载)
+	Overload Concept
+                 They are actually the different functions in the same scope.
+	The same scope (class, name space, global). 
+	The same function name.
+	Different parameters. Or different const postfix.
+		void foo(int i);
+		void foo(float f); 
+
+Class Overload, Override, Overwrite
+	Overload Practice
+	It works depends on the given parameters.
+			int iv = 1;
+			int fv = 1.0f;
+			foo(iv);
+			foo(fv); 
+	It won’t be compiled if you try to overload a function by only different return type.
+			void 	foo(int i);
+			int 	foo(int i); 
+
+Class Overload, Override, Overwrite
+	It won’t be compiled if you try to overload a virtual function with exactly the same declaration.
+			class Base
+			{
+			public:
+			virtual void	foo(){}
+			void		foo(){}
+			}
+	Avoid overloading on a pointer and a numerical type.
+			void foo(int x);
+			void foo(string *ps);
+			f(0);         // calls f(int) or f(string*)?
+
+Class Overload, Override, Overwrite
+◦	Override（覆盖） 
+	Override Concept
+		It’s about the specific implement in the derived class.
+	Different scope. (base class and derived class)
+	The same function name.
+	The same parameters.
+	The same return type except pointer/reference to its own type.（返回类型可以是自己的类型， 比如基类的是基类的返回值类型，子类是子类的返回值类型） 
+	Virtual at least in the base class.
+		class Base
+		{
+		public:
+			virtual void foo(void);
+		}
+		class Derived : public Base
+		{
+		public:
+			virtual void foo(void);
+		}
+Class Overload, Override, Overwrite
+◦	Override（覆盖） 
+	Override Concept
+		It’s about the specific implement in the derived class.
+	Different scope. (base class and derived class)
+	The same function name.
+	The same parameters.
+	The same return type except pointer/reference to its own type.（返回类型可以是自己的类型， 比如基类的是基类的返回值类型，子类是子类的返回值类型） 
+	Virtual at least in the base class.
+		class Base
+		{
+		public:
+			virtual void foo(void);
+		}
+		class Derived : public Base
+		{
+		public:
+			virtual void foo(void);
+		}
+Class Overload, Override, Overwrite
+	The same function name and same parameters but different default value.
+	It calls the virtual function that belongs to the real instance.
+	But get the default value according to the pointer type.
+			virtual void  Base::foo(int i = 0);
+			virtual void  Drived::foo(int i = 1);
+基类的指针指向子类对象时， 会调用子类的foo函数， 但是函数的默认值为基类的即i=0 
+	It will be treated as overwrite if you tries to differ them only by const postfix.
+			virtual void  Base::foo(int i = 0);
+			virtual void  Drived::foo(int i = 1) const;
+
+Class Overload, Override, Overwrite
+◦	Overwrite （重写） 
+	Overwrite Concept	
+	It’s about the functions in the one scope that hide the functions with the same name in another scope.
+	In different scopes
+	Derived class & Base class
+	Class & name space/global.
+	Name space & global scope.
+	The same function name but different parameters with either virtual or not.
+			(virtual) void Base::foo(void);
+			(virtual) void Derived::foo(int i);
+
+Class Overload, Override, Overwrite
+	The same function name and same parameter but different return type without virtual.
+			void Base::foo(void);
+			int Derived::foo(void);
+			virtual void Base::foo(void);	//error
+			virtual int Derived::foo(void); //error	 
+	The same function name and same parameter neither with virtual.
+			void Base::foo(void);
+			void Derived::foo(void); 
+	The same function name and parameters but only with virtual in derived class.
+			void Base::foo(void);
+			virtual void Derived::foo(void); 
+Class Overload, Override, Overwrite
+	The same function name and same parameter but different return type without virtual.
+			void Base::foo(void);
+			int Derived::foo(void);
+			virtual void Base::foo(void);	//error
+			virtual int Derived::foo(void); //error	 
+	The same function name and same parameter neither with virtual.
+			void Base::foo(void);
+			void Derived::foo(void); 
+	The same function name and parameters but only with virtual in derived class.
+			void Base::foo(void);
+			virtual void Derived::foo(void); 
+
+Class Overload, Override, Overwrite
+	Overwrite Practice
+	It works depends on the type of the pointer.
+			pBase->foo();
+			pDerived->foo();
+	You won’t be able to access the base class’ function via derived class typed pointer.
+	You can call the certain functions by specifying the base class type.
+			pDerived->Base::foo();	
+
+Class Overload, Override, Overwrite
+	If there are several overloaded functions in the base class, once you overwrite one of them in the derived class, all of those in the base class will be hidden.
+	class Base
+	{
+	public:
+		void foo() {}
+		void foo(int) {}
+		void foo(float) {}
+		int  foo(int, float) {return 0;}
+	};
+	class Derived: public Base
+	{
+	public:
+		void foo(char*) {} //将把基类的所有foo 函数隐藏掉 
+	};
+	int main()
+	{
+		Derived oDerived;
+		oDerived.foo(NULL);		//access this one only
+		oDerived.Base::foo(1, 1.0f);
+		Test2::Base* pBase = &oDerived;
+		pBase->foo(1, 1.0f);
+	}
+
+Class Inheritance or Composition
+	Inheritance or Composition.继承与组合 
+	To derive means it is.  功能固定的缺点 （function） 
+	To contain means it has.   灵活 
+	Never try to make a class that almighty for all kinds of requirements.不要超级类 
+	It’s not team spirit.
+	It’s terrible to maintain a class like this for both yourself and the others.
+	There is risk to break the previous features when adding a new one.
+	It would be more powerful if you could design it in an extendable structure and then let the relevant classes to do combination.
+
+Class Inheritance or Composition
+	Inheritance or Composition.继承与组合 
+	To derive means it is.  功能固定的缺点 （function） 
+	To contain means it has.   灵活 
+	Never try to make a class that almighty for all kinds of requirements.不要超级类 
+	It’s not team spirit.
+	It’s terrible to maintain a class like this for both yourself and the others.
+	There is risk to break the previous features when adding a new one.
+	It would be more powerful if you could design it in an extendable structure and then let the relevant classes to do combination.
+
+Class Multiple Inheritance
+	Multiple Inheritance
+◦	The derived class can get the functionalities from both base classes.
+	class Base1
+	{
+	public:
+		void foo1() {}
+	};
+	class Base2
+	{
+	public:
+		void foo2() {}
+	};
+	class Derived: public Base1, public Base2
+	{
+	};
+Class Multiple Inheritance
+
+	Ambiguity Issues
+◦	Base1::foo() or Base2::foo() ?
+	class Base1
+	{
+	public:
+		void foo() {}
+	};
+	class Base2
+	{
+	public:
+	void foo() {}
+	};
+	class Derived: public Base1, public Base2
+	{
+	};
+	Derived oDerived;
+	oDerived.Base1::foo();
+	oDerived.Base2::foo();
+
+Class Multiple Inheritance
+	Diamond inheritance problem  钻石继承问题 
+	class Base0
+	{
+	public:
+		void 	baseFoo() {};
+		int 	mValue;
+	};
+	class Base1: public Base0
+	{
+	public:
+		void 	foo() {}
+	};
+	class Base2: public Base0
+	{
+	public:
+		void 	foo() {}
+	};
+	class Derived: public Base1, public Base2
+	{
+	};
+
+Class Multiple Inheritance
+◦	Member
+	oDerived.mValue = 0;	// Not Compiling
+	oDerived.Base1::mValue = 0;//Compling
+◦	Function
+	oDerived.baseFoo();	  // Not Compiling
+	oDerived.Base1::baseFoo(); //Compling 
+◦	Pointer
+	Base0* pBase0 = &oDerived;	 // Not Compiling
+	Base0* pBase0 = (Base1*)&oDerived; //Compling 
+
+Class Multiple Inheritance
+	virtual Base Classes 
+◦	The problem of duplicate subobjects is resolved with virtual inheritance. When a base class is inherited as virtual, only one subobject will appear in the derived class.
+	class Base0
+	{
+	public:
+		void baseFoo() {};
+		int mValue ;
+	};
+	class Base1: virtual public Base0
+	{
+	public:
+		void foo() {}
+	};
+	class Base2: virtual public Base0
+	{
+	public:
+		void foo() {}
+	};
+	class Derived: public Base1, public Base2
+	{
+	};
+Class Multiple Inheritance
+
+	virtual Base Classes 
+◦	The problem of duplicate subobjects is resolved with virtual inheritance. When a base class is inherited as virtual, only one subobject will appear in the derived class.
+	class Base0
+	{
+	public:
+		void baseFoo() {};
+		int mValue ;
+	};
+	class Base1: virtual public Base0
+	{
+	public:
+		void foo() {}
+	};
+	class Base2: virtual public Base0
+	{
+	public:
+		void foo() {}
+	};
+	class Derived: public Base1, public Base2
+	{
+	};
+
+Class Multiple Inheritance
+	Customized constructor
+◦	The Most derived class must explicitly invoke the virtual base class’s constructor to initialize the members inherited from the virtual base class.
+	Base0::Base0(int i)
+	
+	Derived::Derived(int i)
+	:Base0(i)
+	{
+	}
+	Base2::Base2(int i)
+	:Base0(i)	//Won’t be called for constructing Derived.
+	{
+	}
+
+Class Friend
+	The friend is able to access the protected and private members from the out side.
+	Friend class
+	Friend function
+	class Object
+	{
+		friend class ObjectFriend;
+		friend void gFriendFoo(Object* obj);
+	}
+	Practice
+◦	Friend is not something very good for OO design.
+◦	Friend is good if the design is good.
+◦	Do not over use friend, only use friend when there is a good reason.
+◦	Good examples
+	Component and specific component factory.
+	Math class and Math utility functions.
+
+Simple design patterns Interface
+	Interface
+	What is interface?
+	It’s a class with only abstract functions. It indicates the features that it should have but without implement. It’s up to the derived class to implement.
+	What’s the Major difference from class?
+	Only provides interface without any implement.
+	Why use it?
+	It groups the feature in a clear structure.
+	Reduce the dependences between modules.
+	It helps to avoid including high level header files among the multiple projects.
+	It helps the functions & modules to narrow down the input parameters as specific types. It just limits the complication.
+	It’s a good solution to avoid introduce high level stuff to the low level.
+	It’s a useful solution for cross-platform.
+	It makes your system more extendable.
+
+Simple design patterns  Singleton
+	Singleton
+	Concept
+	It’s for something that is designed to have only one instance at the same time.
+	Practice
+	Components
+	static member pointer to itself
+	static sCreateInstance()
+	static sDestroyInstance()
+	static sGetInstance()
+
+Simple design patterns  Singleton
+	Cautions
+	It’s not good to create the singleton instance in the sGetInstance() function.
+	It’s not good to assign the singleton instance pointer in the constructor.
+	It’s better to call sCreateInstacne() explicitly at the beginning of its designed life scope.
+	Please do not forget to call sDestroyInstance() at the end of its life designed life scope.
+	It’s better to declare its constructors and destructors as private to prevent being called by the other. Then, the singleton can only be created by sCreateInstance() and destroyed by sDestroyInstance().
+
+Simple design patterns Factory
+	Factory class
+◦	The specific factory is the class that responsible to create specific object instance.
+	typedef int Object_Type;
+	class ObjectAFactory;
+	class ObjectA: public Object
+	{
+	friend class ObjectAFactory;
+	protected:
+		ObjectA(); // prevent unexceptional construction.
+		~ObjectA();
+	};
+	class ObjectAFactory: public ObjectFactory 
+	{
+	public:
+		virtual 	ObjectA*		create();
+		virtual 	void		destroy();
+		virtual 	Object_Type	getType();
+	};
+
+Simple design patterns Factory
+	Practice
+◦	Separate data parsing and object functionality.
+◦	Better structure to maintain the objects.
+	for(int i = 0; i < objectResNum; ++i)
+	{
+		objectRes = objectResList[i];
+		ObjectFactory* factory = 	ObjectFactoryManager::getObjectFactory(objectRes->getType());
+		Object* object = factory->create(objectRes );
+		addObject(object);
+	}
+Simple design patterns  Callback
+	Callback
+◦	It’s an architecture to notify the others when certain event is triggered.
+	class IOListener 
+	{
+		virtual void onInput(void* input) = 0;
+		virtual void onOutput(void* output) = 0;
+	}
+◦	It is an interface.
+Simple design patterns  Abstraction
+	Abstraction
+◦	It’s an architecture to call customized functions in a module when the user is not allowed to modify it. 
+◦	For example some module wants to log some important information.
+	It doesn’t limit the log method. 
+	It provides an abstraction for the user to implement the customized log function. 
+	The user can write a class base on the Ilog to log to anywhere.
+		class ILog 
+		{
+		public:
+			virtual write(void* buffer, int len) = 0;
+		}
+◦	Advantages
+	More Flexibility
+	Less dependency
+
+Template
+◦	Practice	
+	Consider if you need template when you are writing/ going to write similar codes for different input parameter types.
+	Function Template 
+	template<typename T> 
+	void foo(const T& para1) 
+	{ 
+	} 
+	Class Template 
+	template<typename T> 
+	class Dummy 
+	{ 
+	public: 
+		Dummy(T * _value) 
+		: mValue(_value) 
+		{} 
+	private: 
+		T*	mValue; 
+	}; 
+	Keywords typename & class
+◦	template<typename T> and template<class T>
+	They are almost the same.
+	typename is more dedicated to template.
+	typename can indicate types that belong to another type in template.
+◦	typedef typename T::SubType T_SUBTYPE;
+◦	typename T::SubType subType;
+	void foo(const T& para1) 
+	{
+◦	typename T::SubType subType;
+◦	subType.foo();
+	} 
+
+Good Practice（好的习惯）
+              Assert
+	Assert is very helpful to validate the values before use them. It helps to target bugs.
+	Always assert the incoming pointers and indices before using them.
+	Always assert when entering an invalid state that against your feature logic.
+	The asserted case is something must be fixed. Do not assert acceptable case.
+	The more you trust it the more you need to assert it. It would cost you more time to debug the trusted codes.
+	You should never depend on your user to use your feature correctly for stability. 
+	Do not ignore assert especially when you are debugging.
+	Assert with message for complex case for your user. Then they can fix it without bothering you.
+	Do not put any feature code but only checking code in your assertion.
+	Add “if(condition){}” after assert to avoid crash that may block the whole team.
+	If the game still runnable without the skipped feature.
+
+◦	Ambiguous
+	0.5 -> 0.5f 
+	The compiler will first recognize 0.5 as double, which is slower.
+	It avoids compiling error.
+	void foo1(int i);
+	void foo1(float f);
+	int _tmain(int argc, _TCHAR* argv[])
+	{
+		foo1(0.5);	//0.5 -> 0.5f
+◦	Duplicated codes
+	Please capsulate your codes instead of cope and paste them everywhere.
+◦	Referenced parameters
+	Pass the object parameters as reference to void unnecessary copy operation.
+◦	Const parameters
+	Pass the parameters as const if there is no need to modify it in your function.
+
+
+
+◦	No hardcode
+	const
+	#define
+	You’d better use const instead of #define.
+	Enum 
+	It’s useful to maintain constant values for whole class.
+	It can be used by the others during declaration directly.
+	enum E_TYPE
+	{
+	E_T_1,
+	E_T_2,
+	E_T_NUM
+	}
+	E_TypeObject*[E_T_NUM];
+	variable
+	parameter from config file
+	text from localization kit.
+	Use sizeof(short) instead of 4 for cross-platform.
+	
+Memory – Practice
+
+	Check if the memory allocated successfully. Usually it’s done by memory system.
+	Initialize the allocated memory. (buffer)
+	Always destruct your feature properly.
+	Always destroy the instance that you created.
+	Delete [] XXX for array.
+	Don’t forget to release the instances in the instance array.
+	Always arrange your new/malloc and delete/free smartly. It would be easier to maintain if you obey the rule that the one who allocate the memory should free it.
+	Always allocate the global stuff earlier than the others.
+	Reserve enough items for your containers to avoid reallocation.
+	Virtual Destructors for the base classes.
+	Avoid accessing invalid memory.
+	Do not return pointer or reference that refers to temp value in the functions (from the stack).
+	Be careful if the pointer points to the stuff that is in a different life scope or smaller life scope.
+	Do not forget to set pointer as NULL when it’s released.
+	When destroying your instance, notify the others if your instance is referenced by them. (setXXX(), unsetXXX(), registerXXX(), unregisterXXX())
+	Always check NULL before using pointers especially the pointer from the outside.
+	Maintain and trace all the pointers that points to allocated memory.
+
+singleton.h
+#pragma once
+
+namespace Framework
+{
+	template<class T>
+	class Singleton
+	{
+	public:
+		static T *getInstance() {
+			if (nullptr == mInstance) {
+				mInstance = new T;
+				mInstance->initialize();
+			}
+			return mInstance;
+		}
+
+		static void destory() {
+			SAFE_DELETE(mInstance);
+		}
+
+		virtual void initialize() {}
+		virtual void finitialize() {}
+	protected:
+		Singleton() {}
+		virtual ~Singleton() {}
+
+		static T *mInstance;
+	};
+
+	template<class T>
+	T * Singleton<T>::mInstance;
+}
+
+Factory.h
+#pragma once
+#include <map>
+namespace Framework
+{
+	class Factory
+	{
+	public:
+		class Product
+		{
+		public:
+			virtual ~Product() {}
+		};
+
+		class Worker
+		{
+		public:
+			virtual ~Worker() {}
+			virtual Product *doWork() const = 0;
+		};
+
+		template<class P>
+		class AutoWorker : public Worker
+		{
+		public:
+			virtual Product *doWork() const { return dynamic_cast<Product *>(new P); }
+		};
+
+		virtual ~Factory() 
+		{
+			for (auto itor = mWorkerGroup.begin(); itor != mWorkerGroup.end(); itor++)
+			{
+				SAFE_DELETE(itor->second);
+			}
+			mWorkerGroup.clear();
+		}
+
+		virtual void RegisterWorker(U32 id, const Worker *worker)
+		{
+			mWorkerGroup[id] = worker;
+		}
+		virtual void UnregisterWorker(U32 id)
+		{
+			auto itor = mWorkerGroup.find(id);
+			if (itor != mWorkerGroup.end())
+				mWorkerGroup.erase(itor);
+		}
+		virtual Product *Produce(U32 id)
+		{
+			Product *product = NULL;
+			auto itor = mWorkerGroup.find(id);
+			if (itor != mWorkerGroup.end())
+				product = itor->second->doWork();
+			return product;
+		}
+
+	protected:
+		std::map<U32, const Worker *> mWorkerGroup;
+	};
+
+	template<class W>
+	class WorkerRegisterer
+	{
+	public:
+		WorkerRegisterer(Factory *factory, U32 id)
+		{
+			factory->RegisterWorker(id, new W);
+		}
+	};
+
+#	define REGISTER_WORKER(workerClass, id, pFactory) \
+	Framework::WorkerRegisterer<workerClass> __reg((pFactory), (id));
+
+#	define REGISTER_AUTO_WORKER(productClass, id, pFactory) \
+	Framework::WorkerRegisterer<Framework::Factory::AutoWorker<productClass>> __reg((pFactory), (id));
+}
+
+
+
+
+
+
 
 
 
