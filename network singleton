@@ -1,0 +1,60 @@
+fdpp 
+
+单例模板工厂
+
+singletonClass 与singleImpleClass 一一mapping 
+
+
+template<typename singletonClass，typename singleImpleClass>
+class Singleton{
+
+private :
+static singleImpleClass* m_implementClass;
+public:
+
+//这个是仿函数. 
+Inline singleImpleClass& operator()(void){
+				return *m_implementClass;
+			}
+      
+static bool isCreatedImplementClassInstance()
+{
+return m_implementClass ?true:false;
+}
+
+static void  Initalize() //on main start up to  call 
+{
+if(isCreatedImplementClassInstance()==false)
+{
+// new singleImpleClass here only once
+m_implementClass = new singleImpleClass();
+}
+
+}
+
+static void Finalize(void )
+{
+delete(m_implementClass);
+}
+
+}；
+
+宏 
+	#define SINGLETON_CLASS_DECLARATION(singletonClass, _IMPLEMENT_CLASS) class singletonClass : public singletonClass< singletonClass, _IMPLEMENT_CLASS >
+
+
+SINGLETON_CLASS_DECLARATION(test,testImp)
+{
+
+}
+
+singletonClass 是空类， singleImpleClass类是具体实现的类 。那么空类如何使用具体类的方法（友元或者是继承）。
+ 
+singletonClass（）（）.singleImpleClass的函数名；//第一个括号是创建singletonClass 对象， 第二个函数时将取得singleImpleClass的唯一实例
+
+目的是singletonClass 封装了singleImpleClass. 
+
+class test
+{};
+
+test();//this will create test class instance , it is same as Test te;
