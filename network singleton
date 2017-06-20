@@ -40,7 +40,7 @@ delete(m_implementClass);
 }；
 
 宏 
-	#define SINGLETON_CLASS_DECLARATION(singletonClass, _IMPLEMENT_CLASS) class singletonClass : public singletonClass< singletonClass, _IMPLEMENT_CLASS >
+	#define SINGLETON_CLASS_DECLARATION(singletonClass, _IMPLEMENT_CLASS) class singletonClass : public Singleton< singletonClass, _IMPLEMENT_CLASS >
 
 
 SINGLETON_CLASS_DECLARATION(test,testImp)
