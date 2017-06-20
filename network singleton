@@ -62,4 +62,4 @@ test();//this will create test class instance , it is same as Test te;
 
 c++ 不定参数
 
-MENU_JOB(className, ...)
+xxxx(className, ...)
