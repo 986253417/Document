@@ -12,7 +12,7 @@ private :
 static singleImpleClass* m_implementClass;
 public:
 
-//这个是仿函数. 
+//这个是仿函数.  仿函数(functor)，就是使一个类的使用看上去象一个函数。其实现就是类中实现一个operator()，这个类就有了类似函数的行为，就是一个仿函数类了。
 Inline singleImpleClass& operator()(void){
 				return *m_implementClass;
 			}
