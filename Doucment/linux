@@ -4,3 +4,10 @@ ALT+F3 open new tty
 
 install connector/python on linux use yum
 https://dev.mysql.com/doc/connector-python/en/connector-python-installation-binary.html
+
+
+linux 安装docker（https://yeasy.gitbooks.io/docker_practice/content/install/ubuntu.html）
+
+curl -sSL https://get.docker.com/ | sh
+
+sudo bash (切换到root 用户)
