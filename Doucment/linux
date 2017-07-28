@@ -11,3 +11,6 @@ linux 安装docker（https://yeasy.gitbooks.io/docker_practice/content/install/u
 curl -sSL https://get.docker.com/ | sh
 
 sudo bash (切换到root 用户)
+
+linux 安装jenkins 文档：
+https://www.digitalocean.com/community/tutorials/how-to-set-up-jenkins-for-continuous-development-integration-on-centos-7
