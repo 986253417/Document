@@ -80,6 +80,10 @@ namespace Translator.Inputs
                 return false;
             }
            
+           
+           
+          send schedule recurring email           
+  https://www.extendoffice.com/documents/outlook/1567-outlook-send-schedule-recurring-email.html
             return Directory.Exists(DirPath);
         }
 
