@@ -321,3 +321,18 @@ http://jianbing.github.io/2016/07/08/unity-auto-build-windows/
 
 
 
+C# 中 the @this means you can use the keyword this as a variable
+public static void Bind<T>(this IContext @this, T value)
+        {
+            @this.Bind(typeof(T), value);
+        }
+
+What is Entity Framework
+Entity framework is an open-source ORM (Object-relational mapping) framework for .NET applicatons supported by Microsoft.
+
+https://github.com/moonsharp-devs/moonsharp/tree/master/src/Tutorial/Tutorials
+
+http://wizardforcel.gitbooks.io/effective-csharp/23.html
+
+
+
